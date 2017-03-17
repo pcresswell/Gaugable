@@ -123,13 +123,13 @@
       <Project>{670B0C10-B04C-48D0-BDCA-36FDE578515D}</Project>
       <Name>Sample</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Gaugable\Gaugable.Forms.Plugin.Core.csproj">
-      <Project>{99B2A6B3-B62B-4E9B-844B-70B562475CA5}</Project>
-      <Name>Gaugable.Forms.Plugin.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Gaugable.Forms.Plugin.Android\Gaugable.Forms.Plugin.Android.csproj">
       <Project>{D1D60888-8D49-441E-AB72-72A1BCF2F93D}</Project>
       <Name>Gaugable.Forms.Plugin.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gaugable.Forms.Plugin.Core\Gaugable.Forms.Plugin.Core.csproj">
+      <Project>{99B2A6B3-B62B-4E9B-844B-70B562475CA5}</Project>
+      <Name>Gaugable.Forms.Plugin.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

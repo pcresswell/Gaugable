@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:Sample" xmlns:controls="clr-namespace:Gaugable.Forms.Plugin.Core;assembly=Gaugable" x:Class="Sample.SamplePage">
-	<StackLayout>
-		<Label Text="Before" />
+	<StackLayout Margin="0,20,0,0">
 		<controls:Gauge x:Name="gauge" Color="Purple" HeightRequest="100" HorizontalOptions="FillAndExpand" Progress="{Binding Progress}">
 			<controls:Gauge.RangeDefinition>
 				<controls:Range Min="0" Max="30" Color="Red" />
@@ -11,7 +10,7 @@
 				<controls:Range Min="85" Max="100" Color="Red" />
 			</controls:Gauge.RangeDefinition>
 		</controls:Gauge>
+		<Label Text="Progress Value" />
 		<Slider x:Name="slider" Value="{Binding Progress}" Minimum="0" Maximum="100" Scale="1"/>
-		<Label Text="After" />
 	</StackLayout>
 </ContentPage>

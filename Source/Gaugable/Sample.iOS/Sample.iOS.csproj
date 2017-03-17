@@ -137,7 +137,7 @@
       <Project>{DFEE2FBB-F941-4CEE-9972-0C1CDFDB3E67}</Project>
       <Name>Gaugable.Forms.Plugin.iOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Gaugable\Gaugable.Forms.Plugin.Core.csproj">
+    <ProjectReference Include="..\Gaugable.Forms.Plugin.Core\Gaugable.Forms.Plugin.Core.csproj">
       <Project>{99B2A6B3-B62B-4E9B-844B-70B562475CA5}</Project>
       <Name>Gaugable.Forms.Plugin.Core</Name>
     </ProjectReference>
