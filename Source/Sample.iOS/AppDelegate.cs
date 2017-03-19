@@ -4,7 +4,6 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
-using Gaugable.Forms.Plugin.iOS;
 
 namespace Sample.iOS
 {
@@ -14,10 +13,10 @@ namespace Sample.iOS
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
 			global::Xamarin.Forms.Forms.Init();
-			Gaugable.Forms.Plugin.iOS.GaugeRenderer.Init();
+			//Gaugable.Forms.Plugin.iOS.GaugeRenderer.Init();
 
 			LoadApplication(new App());
-			var t = typeof(Gaugable.Forms.Plugin.Core.Gauge);
+			// var t = typeof(Gaugable.Forms.Plugin.Core.Gauge);
 
 			return base.FinishedLaunching(app, options);
 		}

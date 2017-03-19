@@ -39,6 +39,12 @@
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Nuget|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Nuget</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <AndroidSupportedAbis>arm64-v8a;armeabi;armeabi-v7a;x86</AndroidSupportedAbis>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -122,10 +128,6 @@
     <ProjectReference Include="..\Sample\Sample.csproj">
       <Project>{670B0C10-B04C-48D0-BDCA-36FDE578515D}</Project>
       <Name>Sample</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Gaugable.Forms.Plugin.Android\Gaugable.Forms.Plugin.Android.csproj">
-      <Project>{D1D60888-8D49-441E-AB72-72A1BCF2F93D}</Project>
-      <Name>Gaugable.Forms.Plugin.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\Gaugable.Forms.Plugin.Core\Gaugable.Forms.Plugin.Core.csproj">
       <Project>{99B2A6B3-B62B-4E9B-844B-70B562475CA5}</Project>
