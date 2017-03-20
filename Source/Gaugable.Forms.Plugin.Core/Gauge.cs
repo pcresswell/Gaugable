@@ -16,10 +16,135 @@ namespace Gaugable.Forms.Plugin.Core
 		public Gauge()
 		{
 			this.PaintSurface += Handle_PaintSurface;
-			this.ProgressBar = new ProgressBar();
+			this.ProgressBar = new ProgressBar() { Gauge = this };
+			this.HorizontalAxis = new Axis() { Gauge = this };
 		}
 
-		private ProgressBar ProgressBar { get; set; }
+		internal ProgressBar ProgressBar { get; private set; }
+
+
+		/// <summary>
+		/// Gets or sets the horizontal axis.
+		/// </summary>
+		/// <value>The horizontal axis.</value>
+		public Axis HorizontalAxis
+		{
+			get; set;
+		}
+
+		/// <summary>
+		/// The minor ticks property.
+		/// </summary>
+		public static readonly BindableProperty MinorTicksProperty =
+			BindableProperty.Create(propertyName: nameof(MinorTicks),
+								  returnType: typeof(bool),
+			  declaringType: typeof(Gauge),
+									defaultValue: false);
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="T:Gaugable.Forms.Plugin.Core.Gauge"/> minor ticks.
+		/// </summary>
+		/// <value><c>true</c> if minor ticks; otherwise, <c>false</c>.</value>
+		public bool MinorTicks
+		{
+			get { return (bool)GetValue(MinorTicksProperty); }
+			set { SetValue(MinorTicksProperty, value); }
+		}
+
+		/// <summary>
+		/// The major tick increment property.
+		/// </summary>
+		public static readonly BindableProperty MinorTickIncrementProperty =
+			BindableProperty.Create(propertyName: nameof(MinorTickIncrement),
+								  returnType: typeof(float),
+			  declaringType: typeof(Gauge),
+			  defaultValue: 5f);
+
+		public float MinorTickIncrement
+		{
+			get { return (float)GetValue(MinorTickIncrementProperty); }
+			set { SetValue(MinorTickIncrementProperty, value); }
+		}
+
+		/// <summary>
+		/// The major tick increment property.
+		/// </summary>
+		public static readonly BindableProperty MajorTickIncrementProperty =
+			BindableProperty.Create(propertyName: nameof(MajorTickIncrement),
+								  returnType: typeof(float),
+			  declaringType: typeof(Gauge),
+			                        defaultValue: 30f);
+
+		public float MajorTickIncrement
+		{
+			get { return (float)GetValue(MajorTickIncrementProperty); }
+			set { SetValue(MajorTickIncrementProperty, value); }
+		}
+
+		/// <summary>
+		/// The major ticks property.
+		/// </summary>
+		public static readonly BindableProperty MajorTicksProperty =
+			BindableProperty.Create(propertyName: nameof(MajorTicks),
+								  returnType: typeof(bool),
+			  declaringType: typeof(Gauge),
+			                        defaultValue: false);
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="T:Gaugable.Forms.Plugin.Core.Gauge"/> major ticks.
+		/// </summary>
+		/// <value><c>true</c> if major ticks; otherwise, <c>false</c>.</value>
+		public bool MajorTicks
+		{
+			get { return (bool)GetValue(MajorTicksProperty); }
+			set { SetValue(MajorTicksProperty, value); }
+		}
+
+		/// <summary>
+		/// The minimum property.
+		/// </summary>
+		public static readonly BindableProperty MinProgressProperty =
+		  BindableProperty.Create(propertyName: nameof(MinProgress),
+			  returnType: typeof(int),
+			  declaringType: typeof(Gauge),
+								  defaultValue: 0, propertyChanged: (bindable, oldValue, newValue) =>
+								  {
+									  Gauge g = (Gauge)bindable;
+									  g.ProgressBar.MinProgress = float.Parse(newValue.ToString());
+								  });
+
+		/// <summary>
+		/// Gets or sets the minimum.
+		/// </summary>
+		/// <value>The minimum.</value>
+		public int MinProgress
+		{
+			get { return (int)GetValue(MinProgressProperty); }
+			set { SetValue(MinProgressProperty, value); }
+		}
+
+		/// <summary>
+		/// The minimum property.
+		/// </summary>
+		public static readonly BindableProperty MaxProgressProperty =
+		  BindableProperty.Create(propertyName: nameof(MaxProgress),
+			  returnType: typeof(int),
+			  declaringType: typeof(Gauge),
+								  defaultValue: 100, propertyChanged: (bindable, oldValue, newValue) =>
+								  {
+									  Gauge g = (Gauge)bindable;
+									  g.ProgressBar.MaxProgress = float.Parse(newValue.ToString());
+								  });
+
+		/// <summary>
+		/// Gets or sets the maximum progress value.
+		/// </summary>
+		/// <value>The maximum.</value>
+		public int MaxProgress
+		{
+			get { return (int)GetValue(MaxProgressProperty); }
+			set { SetValue(MaxProgressProperty, value); }
+		}
 
 		/// <summary>
 		/// Progress Bar Color.
@@ -62,6 +187,14 @@ namespace Gaugable.Forms.Plugin.Core
 		{
 			get { return (int)GetValue(ProgressProperty); }
 			set { SetValue(ProgressProperty, value); }
+		}
+
+		internal float GetScaleHeightAsPercent()
+		{
+			if (this.MajorTicks || this.MinorTicks)
+				return GaugeLayoutConstants.SCALE_HEIGHT_PERCENT;
+
+			return 0f;
 		}
 
 		/// <summary>
@@ -122,9 +255,9 @@ namespace Gaugable.Forms.Plugin.Core
 		{
 			foreach (var range in this.RangeDefinition)
 			{
-				if (range.ProgressBar != this.ProgressBar)
+				if (range.Gauge != this)
 				{
-					range.ProgressBar = this.ProgressBar;
+					range.Gauge = this;
 				}
 			}
 		}
@@ -151,6 +284,7 @@ namespace Gaugable.Forms.Plugin.Core
 					range.Draw(canvas, paint);
 				}
 
+				this.HorizontalAxis.Draw(canvas, paint);
 				this.ProgressBar.Draw(canvas, paint);
 
 				canvas.Save();

@@ -57,6 +57,8 @@
     <Compile Include="Range.cs" />
     <Compile Include="RangeDefinition.cs" />
     <Compile Include="DefinitionCollection.cs" />
+    <Compile Include="Axis.cs" />
+    <Compile Include="GaugeLayoutConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

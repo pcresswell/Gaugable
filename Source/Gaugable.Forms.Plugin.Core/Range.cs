@@ -83,13 +83,15 @@ namespace Gaugable.Forms.Plugin.Core
 		/// TODO: Should probably be in the constructor.
 		/// </summary>
 		/// <value>The progress bar.</value>
-		internal ProgressBar ProgressBar { get; set; }
+		internal Gauge Gauge { get; set; }
+
+		private ProgressBar ProgressBar { get { return this.Gauge.ProgressBar; } }
 
 		/// <summary>
 		/// Gets the size of the container from the progress bar.
 		/// </summary>
 		/// <value>The size of the container.</value>
-		internal ISize ContainerSize { get { return this.ProgressBar.ContainerSize; } }
+		internal ISize ContainerSize { get { return this.Gauge.ProgressBar.ContainerSize; } }
 
 		/// <summary>
 		/// Gets the top left point for drawing purposes.
@@ -124,7 +126,7 @@ namespace Gaugable.Forms.Plugin.Core
 		{
 			get
 			{
-				return this.ContainerSize.Height;
+				return this.ContainerSize.Height* (1-this.Gauge.GetScaleHeightAsPercent());
 			}
 		}
 

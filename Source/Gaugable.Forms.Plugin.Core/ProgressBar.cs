@@ -16,9 +16,9 @@ namespace Gaugable.Forms.Plugin.Core
 		/// </summary>
 		internal ProgressBar()
 		{
-			this.MaxProgress = 100;
-			this.MinProgress = 0;
 		}
+
+		private float progress;
 
 		/// <summary>
 		/// Gets or sets the size of the container.
@@ -32,11 +32,33 @@ namespace Gaugable.Forms.Plugin.Core
 		/// <value>The color.</value>
 		internal Xamarin.Forms.Color Color { get; set; }
 
+		internal Gauge Gauge { get; set; }
+
 		/// <summary>
 		/// Gets or sets the progress.
 		/// </summary>
 		/// <value>The progress.</value>
-		internal float Progress { get; set; }
+		internal float Progress
+		{
+			get { return this.progress; }
+
+			set
+			{
+				if (this.MaxProgress < value)
+				{
+					this.progress = this.MaxProgress;
+				}
+				else if (value < this.MinProgress)
+				{
+					this.progress = this.MinProgress;
+				}
+				else
+				{
+					this.progress = value;
+				}
+
+			}
+		}
 
 		/// <summary>
 		/// Gets or sets the max progress value.
@@ -51,14 +73,14 @@ namespace Gaugable.Forms.Plugin.Core
 		internal float MinProgress { get; set; }
 
 		/// <summary>
-		/// Gets the height of the progress bar. Currently hard set to one third of container height.
+		/// Gets the height of the progress bar. Currently hard set to one third of container height minus the scale height.
 		/// </summary>
 		/// <value>The height.</value>
 		private float Height
 		{
 			get
 			{
-				return (float)(this.ContainerSize.Height / 3);
+				return (float)(ContainerSize.Height * (1 - this.Gauge.GetScaleHeightAsPercent()) / 3);
 			}
 		}
 
@@ -70,7 +92,7 @@ namespace Gaugable.Forms.Plugin.Core
 		{
 			get
 			{
-				return ((float)((float)this.Progress * this.ContainerSize.Width / 100f));
+				return ((float)((this.Progress - this.MinProgress) / (this.MaxProgress - this.MinProgress) * this.ContainerSize.Width));
 			}
 		}
 
@@ -100,7 +122,7 @@ namespace Gaugable.Forms.Plugin.Core
 		internal double GetWidthFromRangeValues(int minValue, int maxValue)
 		{
 			// subtract the max from min and give as percentage of container width
-			return  this.ContainerSize.Width * ((maxValue - minValue) / (this.MaxProgress - this.MinProgress));
+			return this.ContainerSize.Width * ((maxValue - minValue) / (this.MaxProgress - this.MinProgress));
 		}
 
 		/// <summary>
