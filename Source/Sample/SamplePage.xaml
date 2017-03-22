@@ -3,9 +3,7 @@
 	<StackLayout Margin="0,20,0,0">
 		<controls:Gauge x:Name="gauge" BackgroundColor="Gray" AxisColor="Navy" MajorTicks="true" MinorTicks="true" MinorTickIncrement="15" MajorTickIncrement="60" MinProgress="0" MaxProgress="180" Color="Fuchsia" HeightRequest="100" HorizontalOptions="FillAndExpand" Progress="{Binding Progress}">
 			<controls:Gauge.RangeDefinition>
-				
 				<controls:Range Min="60" Max="120" Color="Green" />
-
 			</controls:Gauge.RangeDefinition>
 		</controls:Gauge>
 		<Label Text="Progress Value" />
