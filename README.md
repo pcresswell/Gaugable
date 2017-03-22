@@ -4,11 +4,19 @@ Xamarin Forms Gauge Control
 Warning: This is alpha code. Not ready for the big times.
 
 Very simple gauge control. Supports:
--Min and Max progress bar.
--Basic ranges
--Major and minor ticks (enable/disabe and increments).
+* Min and Max progress bar.
+* Basic ranges
+* Major and minor ticks (enable/disabe and increments).
 
-Example XAML:
+Ugly Example:
+
+<img width="374" alt="gauge" src="https://cloud.githubusercontent.com/assets/1090039/24182352/bc2232e2-0e97-11e7-835e-38ee8343b3eb.png">
+
+Add Namespace:
+```
+xmlns:controls="clr-namespace:Gaugable.Forms.Plugin.Core;assembly=Gaugable.Forms.Plugin.Core"
+```
+Then add control:
 ```XML
 <controls:Gauge
     x:Name="gauge"
@@ -30,4 +38,4 @@ Example XAML:
 </controls:Gauge>
 ```
 
-Most everything is bindable.
+Most everything is bindable here. 
