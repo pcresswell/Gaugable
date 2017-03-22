@@ -126,7 +126,7 @@ namespace Gaugable.Forms.Plugin.Core
 		{
 			get
 			{
-				return this.ContainerSize.Height* (1-this.Gauge.GetScaleHeightAsPercent());
+				return this.ContainerSize.Height;
 			}
 		}
 

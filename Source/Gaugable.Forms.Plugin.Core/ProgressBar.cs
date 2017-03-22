@@ -30,7 +30,7 @@ namespace Gaugable.Forms.Plugin.Core
 		/// Gets or sets the progress bar color.
 		/// </summary>
 		/// <value>The color.</value>
-		internal Xamarin.Forms.Color Color { get; set; }
+		internal Xamarin.Forms.Color Color { get { return this.Gauge.Color; } }
 
 		internal Gauge Gauge { get; set; }
 
@@ -64,13 +64,13 @@ namespace Gaugable.Forms.Plugin.Core
 		/// Gets or sets the max progress value.
 		/// </summary>
 		/// <value>The max progress.</value>
-		internal float MaxProgress { get; set; }
+		internal float MaxProgress { get { return this.Gauge.MaxProgress; } }
 
 		/// <summary>
 		/// Gets or sets the minimum progress value.
 		/// </summary>
 		/// <value>The minimum progress.</value>
-		internal float MinProgress { get; set; }
+		internal float MinProgress { get { return this.Gauge.MinProgress; } }
 
 		/// <summary>
 		/// Gets the height of the progress bar. Currently hard set to one third of container height minus the scale height.
@@ -80,7 +80,7 @@ namespace Gaugable.Forms.Plugin.Core
 		{
 			get
 			{
-				return (float)(ContainerSize.Height * (1 - this.Gauge.GetScaleHeightAsPercent()) / 3);
+				return (float)((ContainerSize.Height) / 3);
 			}
 		}
 

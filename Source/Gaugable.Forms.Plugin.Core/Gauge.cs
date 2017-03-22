@@ -2,9 +2,6 @@
 using Xamarin.Forms;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
-using Xamarin.Forms.Platform;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace Gaugable.Forms.Plugin.Core
 {
@@ -27,7 +24,7 @@ namespace Gaugable.Forms.Plugin.Core
 		/// Gets or sets the horizontal axis.
 		/// </summary>
 		/// <value>The horizontal axis.</value>
-		public Axis HorizontalAxis
+		internal Axis HorizontalAxis
 		{
 			get; set;
 		}
@@ -39,7 +36,11 @@ namespace Gaugable.Forms.Plugin.Core
 			BindableProperty.Create(propertyName: nameof(MinorTicks),
 								  returnType: typeof(bool),
 			  declaringType: typeof(Gauge),
-									defaultValue: false);
+									defaultValue: false, propertyChanged: (bindable, oldValue, newValue) =>
+									  {
+										  Gauge g = (Gauge)bindable;
+										  g.InvalidateSurface();
+									  });
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this <see cref="T:Gaugable.Forms.Plugin.Core.Gauge"/> minor ticks.
@@ -56,9 +57,13 @@ namespace Gaugable.Forms.Plugin.Core
 		/// </summary>
 		public static readonly BindableProperty MinorTickIncrementProperty =
 			BindableProperty.Create(propertyName: nameof(MinorTickIncrement),
-								  returnType: typeof(float),
-			  declaringType: typeof(Gauge),
-			  defaultValue: 5f);
+								  	returnType: typeof(float),
+			  						declaringType: typeof(Gauge),
+			  						defaultValue: 5f, propertyChanged: (bindable, oldValue, newValue) =>
+									   {
+										   Gauge g = (Gauge)bindable;
+										   g.InvalidateSurface();
+									   });
 
 		public float MinorTickIncrement
 		{
@@ -71,9 +76,14 @@ namespace Gaugable.Forms.Plugin.Core
 		/// </summary>
 		public static readonly BindableProperty MajorTickIncrementProperty =
 			BindableProperty.Create(propertyName: nameof(MajorTickIncrement),
-								  returnType: typeof(float),
-			  declaringType: typeof(Gauge),
-			                        defaultValue: 30f);
+								 	 	returnType: typeof(float),
+			  							declaringType: typeof(Gauge),
+										defaultValue: 30f,
+										propertyChanged: (bindable, oldValue, newValue) =>
+									  {
+										  Gauge g = (Gauge)bindable;
+										  g.InvalidateSurface();
+									  });
 
 		public float MajorTickIncrement
 		{
@@ -86,9 +96,14 @@ namespace Gaugable.Forms.Plugin.Core
 		/// </summary>
 		public static readonly BindableProperty MajorTicksProperty =
 			BindableProperty.Create(propertyName: nameof(MajorTicks),
-								  returnType: typeof(bool),
-			  declaringType: typeof(Gauge),
-			                        defaultValue: false);
+								  	returnType: typeof(bool),
+								  	declaringType: typeof(Gauge),
+								  	defaultValue: false,
+								  	propertyChanged: (bindable, oldValue, newValue) =>
+									  {
+										  Gauge g = (Gauge)bindable;
+										  g.InvalidateSurface();
+									  });
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this <see cref="T:Gaugable.Forms.Plugin.Core.Gauge"/> major ticks.
@@ -105,12 +120,13 @@ namespace Gaugable.Forms.Plugin.Core
 		/// </summary>
 		public static readonly BindableProperty MinProgressProperty =
 		  BindableProperty.Create(propertyName: nameof(MinProgress),
-			  returnType: typeof(int),
-			  declaringType: typeof(Gauge),
-								  defaultValue: 0, propertyChanged: (bindable, oldValue, newValue) =>
+									returnType: typeof(int),
+									declaringType: typeof(Gauge),
+									defaultValue: 0,
+								  propertyChanged: (bindable, oldValue, newValue) =>
 								  {
 									  Gauge g = (Gauge)bindable;
-									  g.ProgressBar.MinProgress = float.Parse(newValue.ToString());
+									  g.InvalidateSurface();
 								  });
 
 		/// <summary>
@@ -128,13 +144,14 @@ namespace Gaugable.Forms.Plugin.Core
 		/// </summary>
 		public static readonly BindableProperty MaxProgressProperty =
 		  BindableProperty.Create(propertyName: nameof(MaxProgress),
-			  returnType: typeof(int),
-			  declaringType: typeof(Gauge),
-								  defaultValue: 100, propertyChanged: (bindable, oldValue, newValue) =>
-								  {
-									  Gauge g = (Gauge)bindable;
-									  g.ProgressBar.MaxProgress = float.Parse(newValue.ToString());
-								  });
+			  						returnType: typeof(int),
+			  						declaringType: typeof(Gauge),
+								   defaultValue: 100,
+								   propertyChanged: (bindable, oldValue, newValue) =>
+								   {
+									   Gauge g = (Gauge)bindable;
+									   g.InvalidateSurface();
+								   });
 
 		/// <summary>
 		/// Gets or sets the maximum progress value.
@@ -149,16 +166,40 @@ namespace Gaugable.Forms.Plugin.Core
 		/// <summary>
 		/// Progress Bar Color.
 		/// </summary>
+		public static readonly BindableProperty AxisColorProperty =
+		  BindableProperty.Create(propertyName: nameof(AxisColor),
+								  returnType: typeof(Xamarin.Forms.Color),
+								  declaringType: typeof(Gauge),
+								  defaultValue: Xamarin.Forms.Color.Gray,
+								  propertyChanged: (bindable, oldvalue, newvalue) =>
+			{
+				Gauge gauge = (Gauge)bindable;
+				gauge.InvalidateSurface();
+			});
+
+		/// <summary>
+		/// Gets or sets the axis color.
+		/// </summary>
+		/// <value>The color.</value>
+		public Xamarin.Forms.Color AxisColor
+		{
+			get { return (Xamarin.Forms.Color)GetValue(AxisColorProperty); }
+			set { SetValue(AxisColorProperty, value); }
+		}
+
+		/// <summary>
+		/// Progress Bar Color.
+		/// </summary>
 		public static readonly BindableProperty ColorProperty =
 		  BindableProperty.Create(propertyName: nameof(Color),
 								  returnType: typeof(Xamarin.Forms.Color),
-									declaringType: typeof(Range),
-								  defaultValue: Xamarin.Forms.Color.Gray, propertyChanged: (bindable, oldvalue, newvalue) =>
-			{
-				Gauge gauge = (Gauge)bindable;
-				gauge.ProgressBar.Color = (Xamarin.Forms.Color)newvalue;
-				gauge.InvalidateSurface();
-			});
+								  declaringType: typeof(Gauge),
+								  defaultValue: Xamarin.Forms.Color.Gray,
+								  propertyChanged: (bindable, oldvalue, newvalue) =>
+									{
+										Gauge gauge = (Gauge)bindable;
+										gauge.InvalidateSurface();
+									});
 
 		/// <summary>
 		/// Gets or sets the progress bar color.
@@ -175,9 +216,9 @@ namespace Gaugable.Forms.Plugin.Core
 		/// </summary>
 		public static readonly BindableProperty ProgressProperty =
 		  BindableProperty.Create(propertyName: nameof(Progress),
-			  returnType: typeof(int),
-			  declaringType: typeof(Gauge),
-			  defaultValue: 0, propertyChanged: OnProgressPropertyChanged);
+								  returnType: typeof(int),
+								  declaringType: typeof(Gauge),
+								  defaultValue: 0, propertyChanged: OnProgressPropertyChanged);
 
 		/// <summary>
 		/// Gets or sets the progress.

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:Sample" xmlns:controls="clr-namespace:Gaugable.Forms.Plugin.Core;assembly=Gaugable.Forms.Plugin.Core" x:Class="Sample.SamplePage">
 	<StackLayout Margin="0,20,0,0">
-		<controls:Gauge x:Name="gauge" MajorTicks="true" MinorTicks="true" MinorTickIncrement="15" MajorTickIncrement="60" MinProgress="0" MaxProgress="180" Color="Black" HeightRequest="100" HorizontalOptions="FillAndExpand" Progress="{Binding Progress}">
+		<controls:Gauge x:Name="gauge" BackgroundColor="Gray" AxisColor="Navy" MajorTicks="true" MinorTicks="true" MinorTickIncrement="15" MajorTickIncrement="60" MinProgress="0" MaxProgress="180" Color="Fuchsia" HeightRequest="100" HorizontalOptions="FillAndExpand" Progress="{Binding Progress}">
 			<controls:Gauge.RangeDefinition>
-				<controls:Range Min="0" Max="60" Color="Yellow" />
+				
 				<controls:Range Min="60" Max="120" Color="Green" />
-				<controls:Range Min="120" Max="180" Color="Yellow" />
+
 			</controls:Gauge.RangeDefinition>
 		</controls:Gauge>
 		<Label Text="Progress Value" />

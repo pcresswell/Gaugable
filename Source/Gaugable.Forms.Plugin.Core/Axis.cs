@@ -15,31 +15,23 @@ namespace Gaugable.Forms.Plugin.Core
 
 		private bool MajorTicks
 		{
-			get { return this.Gauge.MajorTicks; }
+			get
+			{
+				return this.Gauge.MajorTicks;
+			}
 		}
 
 		private bool MinorTicks
 		{
-			get { return this.Gauge.MinorTicks; }
+			get
+			{
+				return this.Gauge.MinorTicks;
+			}
 		}
 
-		/// <summary>
-		/// The color property.
-		/// </summary>
-		public static readonly BindableProperty ColorProperty =
-		  BindableProperty.Create(propertyName: nameof(Color),
-								  returnType: typeof(Xamarin.Forms.Color),
-									declaringType: typeof(Range),
-								  defaultValue: Xamarin.Forms.Color.Black);
-
-		/// <summary>
-		/// Gets or sets the color.
-		/// </summary>
-		/// <value>The color.</value>
-		public Xamarin.Forms.Color Color
+		internal Xamarin.Forms.Color Color
 		{
-			get { return (Xamarin.Forms.Color)GetValue(ColorProperty); }
-			set { SetValue(ColorProperty, value); }
+			get { return this.Gauge.AxisColor; }
 		}
 
 		internal Gauge Gauge { get; set; }
@@ -59,7 +51,10 @@ namespace Gaugable.Forms.Plugin.Core
 		/// <value>The top left point.</value>
 		internal IPoint TopLeftPoint
 		{
-			get { return new Point(0, this.ContainerSize.Height * (1 - this.Gauge.GetScaleHeightAsPercent())); }
+			get
+			{
+				return new Point(0, 0);
+			}
 		}
 
 		private float MajorTickIncrement
@@ -90,8 +85,6 @@ namespace Gaugable.Forms.Plugin.Core
 
 			// draw these at specific locations
 			var rect = SKRect.Create((float)this.TopLeftPoint.X, (float)this.TopLeftPoint.Y, (float)this.Width, (float)this.Height);
-			paint.Color = Xamarin.Forms.Color.White.ToSKColor();
-			canvas.DrawRect(rect, paint);
 
 			var pathStroke = new SKPaint
 			{
@@ -100,9 +93,8 @@ namespace Gaugable.Forms.Plugin.Core
 				Color = this.Color.ToSKColor(),
 				StrokeWidth = 5
 			};
+
 			ISet<int> majorTicks = new HashSet<int>();
-
-
 
 			for (int i = (int)Math.Max(this.ProgressBar.MinProgress, this.MajorTickIncrement); i < this.ProgressBar.MaxProgress; i = (int)(i + this.MajorTickIncrement))
 			{
