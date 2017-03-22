@@ -17,8 +17,15 @@ namespace Gaugable.Forms.Plugin.Core
 			this.HorizontalAxis = new Axis() { Gauge = this };
 		}
 
-		internal ProgressBar ProgressBar { get; private set; }
-
+		/// <summary>
+		/// Gets the progress bar.
+		/// </summary>
+		/// <value>The progress bar.</value>
+		internal ProgressBar ProgressBar
+		{
+			get;
+			private set;
+		}
 
 		/// <summary>
 		/// Gets or sets the horizontal axis.
@@ -26,7 +33,8 @@ namespace Gaugable.Forms.Plugin.Core
 		/// <value>The horizontal axis.</value>
 		internal Axis HorizontalAxis
 		{
-			get; set;
+			get;
+			set;
 		}
 
 		/// <summary>
@@ -65,6 +73,10 @@ namespace Gaugable.Forms.Plugin.Core
 										   g.InvalidateSurface();
 									   });
 
+		/// <summary>
+		/// Gets or sets the minor tick increment.
+		/// </summary>
+		/// <value>The minor tick increment.</value>
 		public float MinorTickIncrement
 		{
 			get { return (float)GetValue(MinorTickIncrementProperty); }
@@ -85,6 +97,10 @@ namespace Gaugable.Forms.Plugin.Core
 										  g.InvalidateSurface();
 									  });
 
+		/// <summary>
+		/// Gets or sets the major tick increment.
+		/// </summary>
+		/// <value>The major tick increment.</value>
 		public float MajorTickIncrement
 		{
 			get { return (float)GetValue(MajorTickIncrementProperty); }
@@ -230,6 +246,11 @@ namespace Gaugable.Forms.Plugin.Core
 			set { SetValue(ProgressProperty, value); }
 		}
 
+		/// <summary>
+		/// Gets the Axis height as percent of container. 
+		/// Currently set to 0.1 if Major or Minor ticks are enabled.
+		/// </summary>
+		/// <returns>The axis height as percent.</returns>
 		internal float GetScaleHeightAsPercent()
 		{
 			if (this.MajorTicks || this.MinorTicks)

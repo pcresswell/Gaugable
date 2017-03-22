@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 namespace Gaugable.Forms.Plugin.Core
 {
+	/// <summary>
+	/// The Horizontal axis.
+	/// </summary>
 	public class Axis : BindableObject
 	{
 		public Axis()
@@ -13,6 +16,10 @@ namespace Gaugable.Forms.Plugin.Core
 
 		}
 
+		/// <summary>
+		/// Are major ticks enabled?
+		/// </summary>
+		/// <value><c>true</c> if major ticks; otherwise, <c>false</c>.</value>
 		private bool MajorTicks
 		{
 			get
@@ -21,6 +28,10 @@ namespace Gaugable.Forms.Plugin.Core
 			}
 		}
 
+		/// <summary>
+		/// Are minor ticks enabled?
+		/// </summary>
+		/// <value><c>true</c> if minor ticks; otherwise, <c>false</c>.</value>
 		private bool MinorTicks
 		{
 			get
@@ -29,13 +40,25 @@ namespace Gaugable.Forms.Plugin.Core
 			}
 		}
 
+		/// <summary>
+		/// Axis color.
+		/// </summary>
+		/// <value>The color.</value>
 		internal Xamarin.Forms.Color Color
 		{
 			get { return this.Gauge.AxisColor; }
 		}
 
+		/// <summary>
+		/// Gets or sets the gauge.
+		/// </summary>
+		/// <value>The gauge.</value>
 		internal Gauge Gauge { get; set; }
 
+		/// <summary>
+		/// Gets the progress bar.
+		/// </summary>
+		/// <value>The progress bar.</value>
 		private ProgressBar ProgressBar
 		{
 			get
@@ -43,7 +66,6 @@ namespace Gaugable.Forms.Plugin.Core
 				return this.Gauge.ProgressBar;
 			}
 		}
-
 
 		/// <summary>
 		/// Gets the top left point for drawing purposes.
@@ -57,6 +79,10 @@ namespace Gaugable.Forms.Plugin.Core
 			}
 		}
 
+		/// <summary>
+		/// Gets the major tick increment.
+		/// </summary>
+		/// <value>The major tick increment.</value>
 		private float MajorTickIncrement
 		{
 			get
@@ -65,6 +91,10 @@ namespace Gaugable.Forms.Plugin.Core
 			}
 		}
 
+		/// <summary>
+		/// Gets the minor tick increment.
+		/// </summary>
+		/// <value>The minor tick increment.</value>
 		private float MinorTickIncrement
 		{
 			get
@@ -81,76 +111,25 @@ namespace Gaugable.Forms.Plugin.Core
 		/// <param name="paint">Paint.</param>
 		internal void Draw(SKCanvas canvas, SKPaint paint)
 		{
-
-
-			// draw these at specific locations
-			var rect = SKRect.Create((float)this.TopLeftPoint.X, (float)this.TopLeftPoint.Y, (float)this.Width, (float)this.Height);
-
-			var pathStroke = new SKPaint
-			{
-				IsAntialias = true,
-				Style = SKPaintStyle.Stroke,
-				Color = this.Color.ToSKColor(),
-				StrokeWidth = 5
-			};
-
 			ISet<int> majorTicks = new HashSet<int>();
 
-			for (int i = (int)Math.Max(this.ProgressBar.MinProgress, this.MajorTickIncrement); i < this.ProgressBar.MaxProgress; i = (int)(i + this.MajorTickIncrement))
-			{
-				// create the paint for the path
-
-
-				// create a path
-				int xPosition = (int)this.ProgressBar.GetScaledX(i);
-				var path = new SKPath();
-				path.MoveTo(xPosition, (float)this.TopLeftPoint.Y);
-				path.LineTo(xPosition, ((float)(this.TopLeftPoint.Y + this.Height)));
-				if (this.MajorTicks)
-				{
-					majorTicks.Add(i);
-					canvas.DrawPath(path, pathStroke);
-				}
-
-			}
-
-
-			pathStroke = new SKPaint
-			{
-				IsAntialias = true,
-				Style = SKPaintStyle.Stroke,
-				Color = this.Color.ToSKColor(),
-				StrokeWidth = 1
-			};
-
-			if (this.MinorTicks)
-			{
-				for (int i = (int)Math.Max(this.ProgressBar.MinProgress, this.MinorTickIncrement); i < this.ProgressBar.MaxProgress; i = (int)(i + this.MinorTickIncrement))
-				{
-					// create the paint for the path
-
-
-					// create a path
-					int xPosition = (int)this.ProgressBar.GetScaledX(i);
-					var path = new SKPath();
-					path.MoveTo(xPosition, (float)this.TopLeftPoint.Y);
-					path.LineTo(xPosition, ((float)(this.TopLeftPoint.Y + (this.Height / 2))));
-					if (!majorTicks.Contains(i))
-					{
-						canvas.DrawPath(path, pathStroke);
-					}
-
-				}
-			}
-			// draw
-
+			this.DrawMajorTicks(majorTicks, canvas);
+			this.DrawMinorTicks(majorTicks, canvas);
 		}
 
+		/// <summary>
+		/// Gets the height.
+		/// </summary>
+		/// <value>The height.</value>
 		private float Height
 		{
 			get { return (float)(this.ContainerSize.Height * Gauge.GetScaleHeightAsPercent()); }
 		}
 
+		/// <summary>
+		/// Gets the width.
+		/// </summary>
+		/// <value>The width.</value>
 		private float Width
 		{
 			get { return (float)(this.ContainerSize.Width); }
@@ -162,6 +141,70 @@ namespace Gaugable.Forms.Plugin.Core
 		/// <value>The size of the container.</value>
 		private ISize ContainerSize { get { return this.ProgressBar.ContainerSize; } }
 
+		/// <summary>
+		/// Draws the major ticks.
+		/// </summary>
+		/// <param name="majorTicks">Major ticks.</param>
+		/// <param name="canvas">Canvas.</param>
+		private void DrawMajorTicks(ISet<int> majorTicks, SKCanvas canvas)
+		{
+			var pathStroke = new SKPaint
+			{
+				IsAntialias = true,
+				Style = SKPaintStyle.Stroke,
+				Color = this.Color.ToSKColor(),
+				StrokeWidth = 5
+			};
+
+			for (int i = (int)Math.Max(this.ProgressBar.MinProgress, this.MajorTickIncrement); i < this.ProgressBar.MaxProgress; i = (int)(i + this.MajorTickIncrement))
+			{
+				// create a path
+				int xPosition = (int)this.ProgressBar.GetScaledX(i);
+				var path = new SKPath();
+				path.MoveTo(xPosition, (float)this.TopLeftPoint.Y);
+				path.LineTo(xPosition, ((float)(this.TopLeftPoint.Y + this.Height)));
+				if (this.MajorTicks)
+				{
+					majorTicks.Add(i);
+					canvas.DrawPath(path, pathStroke);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Draws the minor ticks.
+		/// </summary>
+		/// <param name="majorTicks">Major ticks.</param>
+		/// <param name="canvas">Canvas.</param>
+		private void DrawMinorTicks(ISet<int> majorTicks, SKCanvas canvas)
+		{
+			var pathStroke = new SKPaint
+			{
+				IsAntialias = true,
+				Style = SKPaintStyle.Stroke,
+				Color = this.Color.ToSKColor(),
+				StrokeWidth = 1
+			};
+
+			if (this.MinorTicks)
+			{
+				for (int i = (int)Math.Max(this.ProgressBar.MinProgress, this.MinorTickIncrement); i < this.ProgressBar.MaxProgress; i = (int)(i + this.MinorTickIncrement))
+				{
+					// create a path
+					int xPosition = (int)this.ProgressBar.GetScaledX(i);
+					var path = new SKPath();
+					path.MoveTo(xPosition, (float)this.TopLeftPoint.Y);
+					path.LineTo(xPosition, ((float)(this.TopLeftPoint.Y + (this.Height / 2)))); // minor ticks are half the height.
+
+					// only draw where there isn't a major tick.
+					if (!majorTicks.Contains(i))
+					{
+						canvas.DrawPath(path, pathStroke);
+					}
+
+				}
+			}
+		}
 	}
 
 }
